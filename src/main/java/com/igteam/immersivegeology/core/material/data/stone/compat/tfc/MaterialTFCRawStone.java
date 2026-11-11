@@ -35,7 +35,6 @@ public class MaterialTFCRawStone extends MaterialStone
 	@Override
 	public ResourceLocation getTextureLocation(IFlagType<?> flag) {
 
-		return new ResourceLocation("tfc", "block/rock/raw/"+getName());
+		return ResourceLocation.fromNamespaceAndPath("tfc", "block/rock/raw/"+getName());
 	}
 }
-
