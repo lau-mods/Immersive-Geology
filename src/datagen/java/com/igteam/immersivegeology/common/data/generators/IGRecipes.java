@@ -326,7 +326,8 @@ public class IGRecipes extends RecipeProvider
 			{
 				for(IGRecipeMethod recipe_method : stage.getMethods())
 				{
-					if(!recipe_method.build(consumer)) IGLib.IG_LOGGER.warn("Failed to build Recipe Method [{}] for material [{}]", recipe_method.getMethod().getMethodName(), entry.getName());
+					if(!recipe_method.build(consumer))
+						throw new IllegalStateException("Failed to build " + recipe_method.getLocation() + " for " + entry.getName());
 				}
 			}
 		}

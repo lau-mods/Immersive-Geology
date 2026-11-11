@@ -1,3 +1,5 @@
+package com.igteam.immersivegeology;
+
 import com.igteam.immersivegeology.common.world.features.helper.noise.IGGenerationType;
 import com.igteam.immersivegeology.common.world.features.helper.noise.IGenerationPattern;
 import com.igteam.immersivegeology.common.world.noise.INoise3D;

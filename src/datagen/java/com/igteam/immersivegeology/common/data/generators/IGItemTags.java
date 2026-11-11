@@ -40,7 +40,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.igteam.immersivegeology.common.data.helper.TFCDatagenCompat.getTFCItemTag;
 
 public class IGItemTags extends ItemTagsProvider
 {
@@ -92,18 +91,7 @@ public class IGItemTags extends ItemTagsProvider
 							if(itemFlag.equals(ItemCategoryFlags.INGOT))
 							{
 								if(material.hasFlag(MaterialFlags.EXISTING_IMPLEMENTATION)) continue;
-								if(ModFlags.TFC.isStrictlyLoaded())
-								{
-									TagKey<Item> tagKey = getTFCItemTag("PILEABLE_INGOTS");
-									if(tagKey==null)
-									{
-										IGLib.IG_LOGGER.warn("Skipped TFC Tag due to null tag");
-									}
-									else
-									{
-										tag(tagKey).add(item);
-									}
-								}
+
 								tag(Tags.Items.INGOTS).add(item);
 							}
 							if(itemFlag.equals(ItemCategoryFlags.PLATE))

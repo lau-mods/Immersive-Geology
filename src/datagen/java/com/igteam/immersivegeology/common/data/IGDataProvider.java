@@ -1,25 +1,25 @@
 package com.igteam.immersivegeology.common.data;
 
+import com.igteam.immersivegeology.core.material.helper.flags.ModFlags;
 import com.igteam.immersivegeology.common.data.generators.*;
 import com.igteam.immersivegeology.common.data.generators.loot.IGLootModifierProvider;
 import com.igteam.immersivegeology.common.data.generators.loot.IGLootProvider;
 import com.igteam.immersivegeology.core.lib.IGLib;
-import com.igteam.immersivegeology.core.material.helper.flags.ModFlags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 import static com.igteam.immersivegeology.core.material.GeologyMaterial.EXISTING_HELPER;
 
-@Mod.EventBusSubscriber(modid = IGLib.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = IGLib.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class IGDataProvider {
     public static Logger log = LogManager.getLogger(IGLib.MODID + "/DataGenerator");
 
@@ -38,16 +38,16 @@ public class IGDataProvider {
         generator.addProvider(event.includeClient(), new IGAtlasProvider(out));
 
         IGBlockStateProvider blockStateProvider = new IGBlockStateProvider(generator, helper);
-        generator.addProvider(runServer, blockStateProvider);
-        generator.addProvider(runServer, new IGItemModelProvider(generator, helper));
-        generator.addProvider(runServer, new IGComplexItemModelProvider(out, helper));
+        generator.addProvider(event.includeClient(), blockStateProvider);
+        generator.addProvider(event.includeClient(), new IGItemModelProvider(generator, helper));
+        generator.addProvider(event.includeClient(), new IGComplexItemModelProvider(out, helper));
         BlockTagsProvider blockTags = new IGBlockTags(out, lookup, helper);
         generator.addProvider(runServer, blockTags);
         generator.addProvider(runServer, new IGFluidTags(out, lookup, helper));
         generator.addProvider(runServer, new IGItemTags(out, lookup, blockTags.contentsGetter(), helper));
-        generator.addProvider(runServer, new IGDynamicModelProvider(blockStateProvider, out, helper));
-        generator.addProvider(runServer, new IGLootProvider(out));
-        generator.addProvider(runServer, new IGLootModifierProvider(out));
+        generator.addProvider(event.includeClient(), new IGDynamicModelProvider(blockStateProvider, out, helper));
+        generator.addProvider(runServer, new IGLootProvider(out, lookup));
+        generator.addProvider(runServer, new IGLootModifierProvider(out, lookup));
         generator.addProvider(runServer, new IGRecipes(out, lookup));
 
         if(ModFlags.TFC.isStrictlyLoaded()) {

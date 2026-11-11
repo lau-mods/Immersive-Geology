@@ -13,7 +13,6 @@ import com.igteam.immersivegeology.core.lib.IGLib;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
@@ -77,36 +76,6 @@ public class TFCDatagenCompat
 			else
 			{
 				IGLib.IG_LOGGER.error("TFC Tried to load a Fluid Tag, this should not happen");
-			}
-		} catch(ClassNotFoundException exception)
-		{
-
-		} catch(NoSuchFieldException exception)
-		{
-
-		} catch (IllegalAccessException exception)
-		{
-
-		} catch(SecurityException securityException)
-		{
-
-		}
-		return null;
-	}
-
-	public static TagKey<Item> getTFCItemTag(String name)
-	{
-		try {
-			Class<?> clazz = Class.forName("net.dries007.tfc.common.TFCTags$Items");
-			Field tag_field = clazz.getDeclaredField(name);
-
-			if(Modifier.isStatic(tag_field.getModifiers()) && TagKey.class.isAssignableFrom(tag_field.getType()))
-			{
-				return (TagKey<Item>) tag_field.get(null);
-			}
-			else
-			{
-				IGLib.IG_LOGGER.error("TFC Tried to load a Item Tag, this should not happen");
 			}
 		} catch(ClassNotFoundException exception)
 		{

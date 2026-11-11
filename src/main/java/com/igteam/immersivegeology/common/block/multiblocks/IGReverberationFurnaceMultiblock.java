@@ -9,6 +9,8 @@
 package com.igteam.immersivegeology.common.block.multiblocks;
 
 import blusunrize.immersiveengineering.api.multiblocks.ClientMultiblocks;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockState;
+import com.igteam.immersivegeology.common.block.multiblocks.logic.RevFurnaceLogic;
 import com.igteam.immersivegeology.core.lib.IGLib;
 import com.igteam.immersivegeology.core.registration.IGMultiblockProvider;
 import net.minecraft.core.BlockPos;
@@ -21,8 +23,14 @@ public class IGReverberationFurnaceMultiblock extends IGTemplateMultiblock {
     public static final IGReverberationFurnaceMultiblock INSTANCE = new IGReverberationFurnaceMultiblock();
 
     public IGReverberationFurnaceMultiblock() {
-        super(new ResourceLocation(IGLib.MODID, "multiblocks/reverberation_furnace"), new BlockPos(1,0,1), new BlockPos(1,1,5), new BlockPos(6,12,6), IGMultiblockProvider.REVERBERATION_FURNACE);
+        super(ResourceLocation.fromNamespaceAndPath(IGLib.MODID, "multiblocks/reverberation_furnace"), new BlockPos(1,0,1), new BlockPos(1,1,5), new BlockPos(6,12,6), IGMultiblockProvider.REVERBERATION_FURNACE);
 
+    }
+
+    @Override
+    protected void initializeState(IMultiblockState state, boolean mirrored)
+    {
+        ((RevFurnaceLogic.State)state).setMirrored(mirrored);
     }
 
     @Override

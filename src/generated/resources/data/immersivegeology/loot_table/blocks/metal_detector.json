@@ -23,13 +23,9 @@
       ],
       "functions": [
         {
-          "function": "minecraft:copy_nbt",
-          "ops": [
-            {
-              "op": "replace",
-              "source": "energy",
-              "target": "BlockEntityTag.energy"
-            }
+          "function": "minecraft:copy_components",
+          "include": [
+            "minecraft:block_entity_data"
           ],
           "source": "block_entity"
         }

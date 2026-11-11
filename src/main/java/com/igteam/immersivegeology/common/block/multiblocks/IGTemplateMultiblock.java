@@ -12,10 +12,10 @@ import blusunrize.immersiveengineering.api.IEProperties;
 import blusunrize.immersiveengineering.api.multiblocks.TemplateMultiblock;
 import blusunrize.immersiveengineering.api.multiblocks.blocks.MultiblockRegistration;
 import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockBE;
+import blusunrize.immersiveengineering.api.multiblocks.blocks.logic.IMultiblockState;
 import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockBlockEntityDummy;
 import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockBlockEntityMaster;
 import blusunrize.immersiveengineering.api.multiblocks.blocks.registry.MultiblockPartBlock;
-import blusunrize.immersiveengineering.common.register.IEItems;
 import blusunrize.immersiveengineering.common.register.IEItems.Tools;
 import blusunrize.immersiveengineering.common.util.IELogger;
 import com.google.common.base.Preconditions;
@@ -24,7 +24,6 @@ import com.igteam.immersivegeology.common.item.IGMBFormationItem;
 import com.igteam.immersivegeology.core.material.data.enums.MetalEnum;
 import com.igteam.immersivegeology.core.material.data.enums.StoneEnum;
 import com.igteam.immersivegeology.core.material.helper.flags.ItemCategoryFlags;
-import com.igteam.immersivegeology.core.registration.IGRegistrationHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -86,12 +85,18 @@ public abstract class IGTemplateMultiblock extends TemplateMultiblock implements
         BlockEntity curr = world.getBlockEntity(actualPos);
         if (curr instanceof MultiblockBlockEntityDummy<?> dummy) {
             dummy.getHelper().setPositionInMB(info.pos());
-        } else if (!(curr instanceof MultiblockBlockEntityMaster)) {
+        } else if (curr instanceof MultiblockBlockEntityMaster<?> master) {
+            initializeState(master.getHelper().getState(), mirrored);
+        } else {
             IELogger.logger.error("Expected MB TE at {} during placement", actualPos);
         }
 
         LevelChunk chunk = world.getChunkAt(actualPos);
         world.markAndNotifyBlock(actualPos, chunk, oldState, newState, 3, 512);
+    }
+
+    protected void initializeState(IMultiblockState state, boolean mirrored)
+    {
     }
 
     public ResourceLocation getBlockName(){

@@ -8,25 +8,23 @@
 
 package com.igteam.immersivegeology.common.block.multiblocks.recipe.builder;
 
-import blusunrize.immersiveengineering.api.crafting.FluidTagInput;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import blusunrize.immersiveengineering.api.crafting.IngredientWithSize;
-import blusunrize.immersiveengineering.api.crafting.builders.IEFinishedRecipe;
+import com.igteam.immersivegeology.client.helper.IGRecipeBuilder;
 import com.igteam.immersivegeology.common.block.multiblocks.recipe.ChemicalRecipe;
-import com.igteam.immersivegeology.core.lib.IGLib;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-public class ChemicalRecipeBuilder extends IEFinishedRecipe<ChemicalRecipeBuilder>
+public class ChemicalRecipeBuilder extends IGRecipeBuilder<ChemicalRecipeBuilder>
 {
 	protected ChemicalRecipeBuilder()
 	{
 		super(ChemicalRecipe.SERIALIZER.get());
 	}
 
-	public static ChemicalRecipeBuilder builder(IngredientWithSize result, FluidStack fluidStack, IngredientWithSize itemInput, FluidTagInput fluidInputA, FluidTagInput fluidInputB, FluidTagInput fluidInputC)
+	public static ChemicalRecipeBuilder builder(IngredientWithSize result, FluidStack fluidStack, IngredientWithSize itemInput, SizedFluidIngredient fluidInputA, SizedFluidIngredient fluidInputB, SizedFluidIngredient fluidInputC)
 	{
-		ChemicalRecipeBuilder builder = new ChemicalRecipeBuilder().addResult(result).addFluid("fluidResult", fluidStack).addFluid("fluidResult", fluidStack)
+		ChemicalRecipeBuilder builder = new ChemicalRecipeBuilder().addResult(result).addFluid("fluidResult", fluidStack)
 				.addIngredient("itemInput",itemInput);
 
 		if(fluidInputA != null)
@@ -44,17 +42,13 @@ public class ChemicalRecipeBuilder extends IEFinishedRecipe<ChemicalRecipeBuilde
 		return builder;
 	}
 
-	public static ChemicalRecipeBuilder builder(ItemStack result, FluidStack fluidStack, IngredientWithSize itemInput, FluidTagInput fluidInputA, FluidTagInput fluidInputB, FluidTagInput fluidInputC)
+	public static ChemicalRecipeBuilder builder(ItemStack result, FluidStack fluidStack, IngredientWithSize itemInput, SizedFluidIngredient fluidInputA, SizedFluidIngredient fluidInputB, SizedFluidIngredient fluidInputC)
 	{
-		ChemicalRecipeBuilder builder = new ChemicalRecipeBuilder().addFluid("fluidResult", fluidStack).addFluid("fluidResult", fluidStack)
+		ChemicalRecipeBuilder builder = new ChemicalRecipeBuilder().addFluid("fluidResult", fluidStack)
 				.addIngredient("itemInput",itemInput);
 		if(!result.isEmpty())
 		{
 			builder.addResult(result);
-		}
-		else
-		{
-			builder.addResult(IngredientWithSize.of(ItemStack.EMPTY));
 		}
 		if(fluidInputA != null)
 		{
