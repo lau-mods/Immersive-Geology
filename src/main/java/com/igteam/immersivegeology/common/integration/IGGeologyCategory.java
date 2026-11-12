@@ -8,6 +8,8 @@
 
 package com.igteam.immersivegeology.common.integration;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.client.server.IntegratedServer;
 import com.igteam.immersivegeology.core.material.data.stone.IGStoneTypes;
 import com.igteam.immersivegeology.core.material.helper.material.IStoneType;
 import blusunrize.immersiveengineering.common.util.compat.jei.JEIHelper;
@@ -37,12 +39,10 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -130,9 +130,9 @@ public class IGGeologyCategory extends IGRecipeCategory<IGGeoRecipe>
 
 	private static final int ROLL_RANGE = 1_000_000;
 	private static final int ROLL_RANGE_END = 750_000;
-	private static final ResourceLocation OVERWORLD = new ResourceLocation("minecraft", "overworld");
-	private static final ResourceLocation NETHER = new ResourceLocation("minecraft", "the_nether");
-	private static final ResourceLocation THE_END = new ResourceLocation("minecraft", "the_end");
+	private static final ResourceLocation OVERWORLD = ResourceLocation.fromNamespaceAndPath("minecraft", "overworld");
+	private static final ResourceLocation NETHER = ResourceLocation.fromNamespaceAndPath("minecraft", "the_nether");
+	private static final ResourceLocation THE_END = ResourceLocation.fromNamespaceAndPath("minecraft", "the_end");
 
 	private static final FormattedCharSequence ELLIPSIS = FormattedCharSequence.forward("...", Style.EMPTY);
 
@@ -147,7 +147,7 @@ public class IGGeologyCategory extends IGRecipeCategory<IGGeoRecipe>
 	public IGGeologyCategory(IGuiHelper helper)
 	{
 		super(helper, JEIRecipeTypes.GEOHINT, "block.immersivegeology.geohint");
-		ResourceLocation background = new ResourceLocation("minecraft", "textures/block/dirt.png");
+		ResourceLocation background = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/dirt.png");
 		IDrawableStatic back = guiHelper.drawableBuilder(background, 0, 0, PAGE_WIDTH, PAGE_HEIGHT)
 				.setTextureSize(16, 16).build();
 		setBackground(back);
@@ -521,7 +521,7 @@ public class IGGeologyCategory extends IGRecipeCategory<IGGeoRecipe>
 	{
 		if(!generationEnabled(config)) return 0;
 		List<? extends String> dimensions = dimensionsOf(config);
-		boolean endOnly = dimensions.size()==1&&THE_END.equals(new ResourceLocation(dimensions.get(0)));
+		boolean endOnly = dimensions.size()==1&&THE_END.equals(ResourceLocation.parse(dimensions.get(0)));
 		return Math.min(1.0, (double)IGServerConfig.getOrDefault(config.generationChance)/(endOnly?ROLL_RANGE_END
 				: ROLL_RANGE));
 	}
@@ -662,8 +662,8 @@ public class IGGeologyCategory extends IGRecipeCategory<IGGeoRecipe>
 		boolean overworldListed = false;
 		for(String id : dimensionsOf(config))
 		{
-			if(!ResourceLocation.isValidResourceLocation(id)) continue;
-			ResourceLocation dimension = new ResourceLocation(id);
+			if(!(ResourceLocation.tryParse(id)!=null)) continue;
+			ResourceLocation dimension = ResourceLocation.parse(id);
 
 			boolean hosts;
 			boolean viaTFC = false;
