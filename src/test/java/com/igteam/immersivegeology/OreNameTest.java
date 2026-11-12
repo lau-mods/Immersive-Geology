@@ -1,12 +1,13 @@
+package com.igteam.immersivegeology;
+
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -19,13 +20,18 @@ public class OreNameTest
 {
 	private static final Map<String, String> entries = new HashMap<>();
 
-	private static final Path EN_US = Path.of("src/main/resources/assets/immersivegeology/lang/en_us.json");
+	private static final String EN_US = "/assets/immersivegeology/lang/en_us.json";
 
 	@BeforeAll
 	static void loadLanguage() throws IOException
 	{
 		Pattern pair = Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
-		Matcher matcher = pair.matcher(Files.readString(EN_US));
+		String language;
+		try(var stream = Objects.requireNonNull(OreNameTest.class.getResourceAsStream(EN_US)))
+		{
+			language = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+		}
+		Matcher matcher = pair.matcher(language);
 		while(matcher.find()) entries.put(matcher.group(1), matcher.group(2));
 
 		Language.inject(new Language()
